@@ -1,0 +1,19 @@
+required:
+  - target
+properties:
+  target:
+    type: string
+  description:
+    type: string
+  expire_in:
+    type: string
+    example: 2 minutes/hours/days
+  password:
+    type: string
+  customurl:
+    type: string
+  reuse:
+    type: boolean
+    default: false
+  domain:
+    type: string

@@ -1,0 +1,22 @@
+get:
+  tags:
+    - links
+  description: Get link stats
+  parameters:
+    - name: id
+      in: path
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '200':
+      description: Link stats
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Stats.yaml
+  security:
+    - APIKeyAuth: []

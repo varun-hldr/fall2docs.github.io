@@ -1,0 +1,27 @@
+type: object
+properties:
+  address:
+    type: string
+  banned:
+    type: boolean
+    default: false
+  created_at:
+    type: string
+    format: date-time
+  id:
+    type: string
+    format: uuid
+  link:
+    type: string
+  password:
+    type: boolean
+    default: false
+  target:
+    type: string
+  description:
+    type: string
+  updated_at:
+    type: string
+    format: date-time
+  visit_count:
+    type: number

@@ -1,0 +1,13 @@
+get:
+  tags:
+    - users
+  description: Get user info
+  responses:
+    '200':
+      description: User info
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/User.yaml
+  security:
+    - APIKeyAuth: []

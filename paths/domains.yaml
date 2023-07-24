@@ -1,0 +1,18 @@
+post:
+  tags:
+    - domains
+  description: Create a domain
+  requestBody:
+    content:
+      application/json:
+        schema:
+          $ref: ../components/schemas/body_2.yaml
+  responses:
+    '200':
+      description: Created domain
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/Domain.yaml
+  security:
+    - APIKeyAuth: []

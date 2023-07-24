@@ -1,0 +1,8 @@
+type: object
+properties:
+  stats:
+    $ref: ./StatsItem_stats.yaml
+  views:
+    type: array
+    items:
+      type: number

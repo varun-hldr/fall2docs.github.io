@@ -1,0 +1,7 @@
+required:
+  - address
+properties:
+  address:
+    type: string
+  homepage:
+    type: string

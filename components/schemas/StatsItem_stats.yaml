@@ -1,0 +1,18 @@
+type: object
+properties:
+  browser:
+    type: array
+    items:
+      $ref: ./StatsItem_stats_browser.yaml
+  os:
+    type: array
+    items:
+      $ref: ./StatsItem_stats_browser.yaml
+  country:
+    type: array
+    items:
+      $ref: ./StatsItem_stats_browser.yaml
+  referrer:
+    type: array
+    items:
+      $ref: ./StatsItem_stats_browser.yaml

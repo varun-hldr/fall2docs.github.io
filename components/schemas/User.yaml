@@ -1,0 +1,10 @@
+type: object
+properties:
+  apikey:
+    type: string
+  email:
+    type: string
+  domains:
+    type: array
+    items:
+      $ref: ./Domain.yaml

@@ -1,0 +1,10 @@
+get:
+  tags:
+    - health
+  summary: API health
+  responses:
+    '200':
+      description: Health
+      content:
+        text/html:
+          example: OK

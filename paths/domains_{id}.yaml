@@ -1,0 +1,22 @@
+delete:
+  tags:
+    - domains
+  description: Delete a domain
+  parameters:
+    - name: id
+      in: path
+      required: true
+      style: simple
+      explode: false
+      schema:
+        type: string
+        format: uuid
+  responses:
+    '200':
+      description: Deleted domain successfully
+      content:
+        application/json:
+          schema:
+            $ref: ../components/schemas/inline_response_200_1.yaml
+  security:
+    - APIKeyAuth: []

@@ -1,0 +1,34 @@
+openapi: 3.0.0
+info:
+  title: fall2.in
+  description: |
+    API reference for [http://fall2.in](http://fall2.in).
+  version: 0.1.0
+servers:
+  - url: https://fall2.in/api/v2
+tags:
+  - name: health
+  - name: links
+  - name: domains
+  - name: users
+paths:
+  /health:
+    $ref: paths/health.yaml
+  /links:
+    $ref: paths/links.yaml
+  /links/{id}:
+    $ref: paths/links_{id}.yaml
+  /links/{id}/stats:
+    $ref: paths/links_{id}_stats.yaml
+  /domains:
+    $ref: paths/domains.yaml
+  /domains/{id}:
+    $ref: paths/domains_{id}.yaml
+  /users:
+    $ref: paths/users.yaml
+components:
+  securitySchemes:
+    APIKeyAuth:
+      type: apiKey
+      name: X-API-KEY
+      in: header

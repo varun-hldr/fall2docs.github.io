@@ -1,0 +1,14 @@
+properties:
+  limit:
+    type: number
+    default: 10
+  skip:
+    type: number
+    default: 0
+  total:
+    type: number
+    default: 0
+  data:
+    type: array
+    items:
+      $ref: ./Link.yaml
