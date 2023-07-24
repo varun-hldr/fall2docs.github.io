@@ -1,80 +1,505 @@
-openapi: 3.1.0
-info:
-  version: 1.0.0
-  title: Example.com
-  termsOfService: https://example.com/terms/
-  contact:
-    email: contact@example.com
-    url: http://example.com/contact
-  license:
-    name: Apache 2.0
-    url: http://www.apache.org/licenses/LICENSE-2.0.html
-  x-logo:
-    url: https://redocly.github.io/openapi-template/logo.png
-  description: >
-    This is an **example** API to demonstrate features of the OpenAPI
-    specification.
-
-    # Introduction
-
-    This API definition is intended to to be a good starting point for
-    describing your API in [OpenAPI/Swagger
-    format](https://github.com/OAI/OpenAPI-Specification/blob/master/versions/3.0.2.md).
-
-    It also demonstrates features of the
-    [create-openapi-repo](https://github.com/Redocly/create-openapi-repo) tool
-    and the [Redoc](https://github.com/Redocly/Redoc) documentation engine. Beyond
-    the standard OpenAPI syntax, we use a few 
-    [vendor extensions](https://github.com/Redocly/Redoc/blob/master/docs/redoc-vendor-extensions.md).
-
-    # OpenAPI Specification
-
-    The goal of The OpenAPI Specification is to define a standard, language-agnostic interface to REST APIs which
-    allows both humans and computers to discover and understand the capabilities
-    of the service without access to source
-    code, documentation, or through network traffic inspection. When properly
-    defined via OpenAPI, a consumer can 
-    understand and interact with the remote service with a minimal amount of
-    implementation logic. Similar to what
-    interfaces have done for lower-level programming, OpenAPI removes the
-    guesswork in calling the service.
-tags:
-  - name: Echo
-    description: Example echo operations.
-  - name: User
-    description: Operations about users.
-  - name: Tag
-    description: This is a tag description.
-servers:
-  - url: https://{tenant}/api/v1
-    variables:
-      tenant:
-        default: www
-        description: Your tenant id
-  - url: https://example.com/api/v1
-paths:
-  /users/{username}:
-    $ref: paths/users_{username}.yaml
-  /echo:
-    $ref: paths/echo.yaml
-  /pathItem:
-    $ref: paths/pathItem.yaml
-  /pathItemWithExamples:
-    $ref: paths/pathItemWithExamples.yaml
-components:
-  securitySchemes:
-    main_auth:
-      type: oauth2
-      flows:
-        implicit:
-          authorizationUrl: http://example.com/api/oauth/dialog
-          scopes:
-            read:users: read users info
-            write:users: modify or remove users
-    api_key:
-      type: apiKey
-      in: header
-      name: api_key
-    basic_auth:
-      type: http
-      scheme: basic
+{
+  "openapi": "3.0.0",
+  "info":
+    {
+      "title": "fall2.in",
+      "description": "API reference for [http://fall2.in](http://fall2.in).\n",
+      "version": "0.1.0",
+    },
+  "servers": [{ "url": "https://fall2.in/api/v2" }],
+  "tags":
+    [
+      { "name": "health" },
+      { "name": "links" },
+      { "name": "domains" },
+      { "name": "users" },
+    ],
+  "paths":
+    {
+      "/health":
+        {
+          "get":
+            {
+              "tags": ["health"],
+              "summary": "API health",
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "Health",
+                      "content": { "text/html": { "example": "OK" } },
+                    },
+                },
+            },
+        },
+      "/links":
+        {
+          "get":
+            {
+              "tags": ["links"],
+              "description": "Get list of links",
+              "parameters":
+                [
+                  {
+                    "name": "limit",
+                    "in": "query",
+                    "description": "Limit",
+                    "required": false,
+                    "style": "form",
+                    "explode": true,
+                    "schema": { "type": "number", "example": 10 },
+                  },
+                  {
+                    "name": "skip",
+                    "in": "query",
+                    "description": "Skip",
+                    "required": false,
+                    "style": "form",
+                    "explode": true,
+                    "schema": { "type": "number", "example": 0 },
+                  },
+                  {
+                    "name": "all",
+                    "in": "query",
+                    "description": "All links (ADMIN only)",
+                    "required": false,
+                    "style": "form",
+                    "explode": true,
+                    "schema": { "type": "boolean", "example": false },
+                  },
+                ],
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "List of links",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/inline_response_200",
+                                },
+                            },
+                        },
+                    },
+                },
+              "security": [{ "APIKeyAuth": [] }],
+            },
+          "post":
+            {
+              "tags": ["links"],
+              "description": "Create a short link",
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        { "schema": { "$ref": "#/components/schemas/body" } },
+                    },
+                },
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "Created link",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema": { "$ref": "#/components/schemas/Link" },
+                            },
+                        },
+                    },
+                },
+              "security": [{ "APIKeyAuth": [] }],
+            },
+        },
+      "/links/{id}":
+        {
+          "delete":
+            {
+              "tags": ["links"],
+              "description": "Delete a link",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "style": "simple",
+                    "explode": false,
+                    "schema": { "type": "string", "format": "uuid" },
+                  },
+                ],
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "Deleted link successfully",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/inline_response_200_1",
+                                },
+                            },
+                        },
+                    },
+                },
+              "security": [{ "APIKeyAuth": [] }],
+            },
+          "patch":
+            {
+              "tags": ["links"],
+              "description": "Update a link",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "style": "simple",
+                    "explode": false,
+                    "schema": { "type": "string", "format": "uuid" },
+                  },
+                ],
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        { "schema": { "$ref": "#/components/schemas/body_1" } },
+                    },
+                },
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "Updated link successfully",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema": { "$ref": "#/components/schemas/Link" },
+                            },
+                        },
+                    },
+                },
+              "security": [{ "APIKeyAuth": [] }],
+            },
+        },
+      "/links/{id}/stats":
+        {
+          "get":
+            {
+              "tags": ["links"],
+              "description": "Get link stats",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "style": "simple",
+                    "explode": false,
+                    "schema": { "type": "string", "format": "uuid" },
+                  },
+                ],
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "Link stats",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/Stats" },
+                            },
+                        },
+                    },
+                },
+              "security": [{ "APIKeyAuth": [] }],
+            },
+        },
+      "/domains":
+        {
+          "post":
+            {
+              "tags": ["domains"],
+              "description": "Create a domain",
+              "requestBody":
+                {
+                  "content":
+                    {
+                      "application/json":
+                        { "schema": { "$ref": "#/components/schemas/body_2" } },
+                    },
+                },
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "Created domain",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                { "$ref": "#/components/schemas/Domain" },
+                            },
+                        },
+                    },
+                },
+              "security": [{ "APIKeyAuth": [] }],
+            },
+        },
+      "/domains/{id}":
+        {
+          "delete":
+            {
+              "tags": ["domains"],
+              "description": "Delete a domain",
+              "parameters":
+                [
+                  {
+                    "name": "id",
+                    "in": "path",
+                    "required": true,
+                    "style": "simple",
+                    "explode": false,
+                    "schema": { "type": "string", "format": "uuid" },
+                  },
+                ],
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "Deleted domain successfully",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema":
+                                {
+                                  "$ref": "#/components/schemas/inline_response_200_1",
+                                },
+                            },
+                        },
+                    },
+                },
+              "security": [{ "APIKeyAuth": [] }],
+            },
+        },
+      "/users":
+        {
+          "get":
+            {
+              "tags": ["users"],
+              "description": "Get user info",
+              "responses":
+                {
+                  "200":
+                    {
+                      "description": "User info",
+                      "content":
+                        {
+                          "application/json":
+                            {
+                              "schema": { "$ref": "#/components/schemas/User" },
+                            },
+                        },
+                    },
+                },
+              "security": [{ "APIKeyAuth": [] }],
+            },
+        },
+    },
+  "components":
+    {
+      "schemas":
+        {
+          "Link":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "address": { "type": "string" },
+                  "banned": { "type": "boolean", "default": false },
+                  "created_at": { "type": "string", "format": "date-time" },
+                  "id": { "type": "string", "format": "uuid" },
+                  "link": { "type": "string" },
+                  "password": { "type": "boolean", "default": false },
+                  "target": { "type": "string" },
+                  "description": { "type": "string" },
+                  "updated_at": { "type": "string", "format": "date-time" },
+                  "visit_count": { "type": "number" },
+                },
+            },
+          "Domain":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "address": { "type": "string" },
+                  "banned": { "type": "boolean", "default": false },
+                  "created_at": { "type": "string", "format": "date-time" },
+                  "id": { "type": "string", "format": "uuid" },
+                  "homepage": { "type": "string" },
+                  "updated_at": { "type": "string", "format": "date-time" },
+                },
+            },
+          "User":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "apikey": { "type": "string" },
+                  "email": { "type": "string" },
+                  "domains":
+                    {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Domain" },
+                    },
+                },
+            },
+          "StatsItem":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "stats": { "$ref": "#/components/schemas/StatsItem_stats" },
+                  "views": { "type": "array", "items": { "type": "number" } },
+                },
+            },
+          "Stats":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "allTime": { "$ref": "#/components/schemas/StatsItem" },
+                  "lastDay": { "$ref": "#/components/schemas/StatsItem" },
+                  "lastMonth": { "$ref": "#/components/schemas/StatsItem" },
+                  "lastWeek": { "$ref": "#/components/schemas/StatsItem" },
+                  "updatedAt": { "type": "string" },
+                  "address": { "type": "string" },
+                  "banned": { "type": "boolean", "default": false },
+                  "created_at": { "type": "string", "format": "date-time" },
+                  "id": { "type": "string", "format": "uuid" },
+                  "link": { "type": "string" },
+                  "password": { "type": "boolean", "default": false },
+                  "target": { "type": "string" },
+                  "updated_at": { "type": "string", "format": "date-time" },
+                  "visit_count": { "type": "number" },
+                },
+            },
+          "inline_response_200":
+            {
+              "properties":
+                {
+                  "limit": { "type": "number", "default": 10 },
+                  "skip": { "type": "number", "default": 0 },
+                  "total": { "type": "number", "default": 0 },
+                  "data":
+                    {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Link" },
+                    },
+                },
+            },
+          "body":
+            {
+              "required": ["target"],
+              "properties":
+                {
+                  "target": { "type": "string" },
+                  "description": { "type": "string" },
+                  "expire_in":
+                    { "type": "string", "example": "2 minutes/hours/days" },
+                  "password": { "type": "string" },
+                  "customurl": { "type": "string" },
+                  "reuse": { "type": "boolean", "default": false },
+                  "domain": { "type": "string" },
+                },
+            },
+          "inline_response_200_1":
+            { "properties": { "message": { "type": "string" } } },
+          "body_1":
+            {
+              "required": ["target", "address"],
+              "properties":
+                {
+                  "target": { "type": "string" },
+                  "address": { "type": "string" },
+                  "description": { "type": "string" },
+                  "expire_in":
+                    { "type": "string", "example": "2 minutes/hours/days" },
+                },
+            },
+          "body_2":
+            {
+              "required": ["address"],
+              "properties":
+                {
+                  "address": { "type": "string" },
+                  "homepage": { "type": "string" },
+                },
+            },
+          "StatsItem_stats_browser":
+            {
+              "type": "object",
+              "properties":
+                { "name": { "type": "string" }, "value": { "type": "number" } },
+            },
+          "StatsItem_stats":
+            {
+              "type": "object",
+              "properties":
+                {
+                  "browser":
+                    {
+                      "type": "array",
+                      "items":
+                        {
+                          "$ref": "#/components/schemas/StatsItem_stats_browser",
+                        },
+                    },
+                  "os":
+                    {
+                      "type": "array",
+                      "items":
+                        {
+                          "$ref": "#/components/schemas/StatsItem_stats_browser",
+                        },
+                    },
+                  "country":
+                    {
+                      "type": "array",
+                      "items":
+                        {
+                          "$ref": "#/components/schemas/StatsItem_stats_browser",
+                        },
+                    },
+                  "referrer":
+                    {
+                      "type": "array",
+                      "items":
+                        {
+                          "$ref": "#/components/schemas/StatsItem_stats_browser",
+                        },
+                    },
+                },
+            },
+        },
+      "securitySchemes":
+        {
+          "APIKeyAuth":
+            { "type": "apiKey", "name": "X-API-KEY", "in": "header" },
+        },
+    },
+}
